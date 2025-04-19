@@ -49,7 +49,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    bat "docker run --rm -p 3000:3000 --name %CONTAINER_NAME% %IMAGE_NAME%"
+                    bat "docker run --rm -p 8082:3000 --name %CONTAINER_NAME% %IMAGE_NAME%"
                 }
             }
         }

@@ -5,17 +5,17 @@ pipeline {
         LOCAL_PROJECT_PATH = "D:/Shariq/Devops/prac5/Q5"
         IMAGE_NAME = "my-node-app"
         CONTAINER_NAME = "node-container"
-        BUILD_CONTEXT = "${env.WORKSPACE}/app"
+        BUILD_CONTEXT = "${env.WORKSPACE}\\app"
     }
 
     stages {
         stage('Prepare Workspace') {
             steps {
                 script {
-                    // Create build context directory inside workspace
-                    bat "mkdir %BUILD_CONTEXT%"
+                    // Create build context folder
+                    bat "if not exist \"%BUILD_CONTEXT%\" mkdir \"%BUILD_CONTEXT%\""
 
-                    // Copy all files from local project folder to workspace/app
+                    // Copy local app files to Jenkins workspace
                     bat "xcopy /E /I /Y \"%LOCAL_PROJECT_PATH%\\*\" \"%BUILD_CONTEXT%\\\""
                 }
             }
@@ -24,7 +24,16 @@ pipeline {
         stage('Install Node Dependencies') {
             steps {
                 script {
-                    bat "cd %BUILD_CONTEXT% && npm install"
+                    bat "cd \"%BUILD_CONTEXT%\" && npm install"
+                }
+            }
+        }
+
+        stage('Copy Dockerfile') {
+            steps {
+                script {
+                    // Copy Dockerfile from repo (workspace root) to app context
+                    bat "copy \"Dockerfile\" \"%BUILD_CONTEXT%\""
                 }
             }
         }
@@ -32,11 +41,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Copy Dockerfile from Jenkins workspace (from GitHub repo) into build context
-                    bat "copy Dockerfile %BUILD_CONTEXT%"
-
-                    // Build docker image using app folder as context
-                    bat "docker build -t %IMAGE_NAME% %BUILD_CONTEXT%"
+                    bat "docker build -t %IMAGE_NAME% \"%BUILD_CONTEXT%\""
                 }
             }
         }

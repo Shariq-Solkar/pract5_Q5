@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_PATH = "D:/Shariq/Devops/prac5/Q5"
         IMAGE_NAME = "my-node-app"
         CONTAINER_NAME = "node-container"
     }
@@ -11,8 +10,7 @@ pipeline {
         stage('Install Node Dependencies') {
             steps {
                 script {
-                    // Ensure node_modules is fresh each time (optional)
-                    bat "cd %PROJECT_PATH% && npm install"
+                    bat "npm install"
                 }
             }
         }
@@ -20,7 +18,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    bat "docker build -t %IMAGE_NAME% %PROJECT_PATH%"
+                    bat "docker build -t %IMAGE_NAME% ."
                 }
             }
         }

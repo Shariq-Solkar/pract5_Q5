@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_PATH = "D:\Shariq\Devops\prac5\Q5"
+        PROJECT_PATH = "D:/Shariq/Devops/prac5/Q5"
         IMAGE_NAME = "my-node-app"
         CONTAINER_NAME = "node-container"
     }
